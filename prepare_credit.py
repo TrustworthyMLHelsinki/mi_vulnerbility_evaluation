@@ -5,21 +5,7 @@ Prepare cleaned German Credit / credit-g dataset arrays for TabPFN-style use.
 Dataset:
   Statlog German Credit Data, available from UCI and OpenML as credit-g.
 
-Processing:
-  1. Load OpenML credit-g by default, or load UCI german.data / a local raw file.
-  2. Validate and normalize feature/target columns.
-  3. Drop rows with missing values, if any.
-  4. Encode categorical features as deterministic integer category codes.
-  5. Encode credit-risk labels:
-       good = 0
-       bad  = 1
-  6. Save full arrays and a stratified train/test split.
-
-Important:
-  This script does NOT rebalance labels. It preserves the dataset's natural
-  class distribution and only uses stratification for the train/test split.
-
-Expected size for the classic German Credit dataset:
+German Credit dataset:
   1,000 total rows
     700 good credit risks
     300 bad credit risks
