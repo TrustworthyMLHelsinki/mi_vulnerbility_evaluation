@@ -2,15 +2,11 @@
 
 ### Dependencies:
 
-Install the Python dependencies with:
+Install the following Python dependencies:
 
 ```bash
-pip install numpy pandas scipy scikit-learn matplotlib tqdm tueplots jupyter torch tensorflow tabpfn
+numpy pandas scipy scikit-learn matplotlib tqdm tueplots jupyter torch tensorflow tabpfn
 ```
-
-`train_eff_lira_models.py` uses `TabPFNClassifier(device="cuda")`, so the
-TabPFN experiments expect a CUDA-capable PyTorch setup. To run on CPU, change
-the `device="cuda"` argument in that file.
 
 ### Preparing Datasets:
 
@@ -33,9 +29,17 @@ python prepare_adult.py \
 The script writes `X.npy`, `y.npy`, train/test splits, feature metadata, and
 `metadata.json` to the output directory.
 
-Other datasets are loaded through `utils.py`. The supported dataset in
-`train_eff_lira_models.py` include `blood`, `creditg`, `diabetes`, `heart`, and
-`adult-balanced`. 
+Use `prepare_credit.py` to prepare the German Credit dataset:
+
+```bash
+python prepare_credit.py --out-dir credit_npy --train-size 800 --random-state 42
+```
+
+By default this uses OpenML `credit-g`. To use a local UCI-format `german.data`
+file instead, pass `--raw-path path/to/german.data`.
+
+`train_eff_lira_models.py` expects every dataset directory to contain `X.npy`
+and `y.npy`. The `--dataset` value is used only to name the results directory.
 
 ### Running Efficient LiRA:
 
@@ -69,6 +73,11 @@ python train_eff_lira_models.py \
 This writes files such as
 `{results}/{dataset}/Seed={seed}/T={target_dataset_size}/stats_target_m_in_{start_index}_{stop_index}.pkl`. Run additional ranges if needed.
 
+
+**[NOTE]** `train_eff_lira_models.py` uses `TabPFNClassifier(device="cuda")`, so the
+TabPFN experiments expect a CUDA-capable PyTorch setup. To run on CPU, change
+the `device="cuda"` argument in that file.
+
 ### Other Analysis Notebooks:
 
 The notebooks have the following roles:
@@ -82,3 +91,4 @@ The notebooks have the following roles:
 Some notebooks expect result files under `results/`. These result files are not
 all included in the repository and should be generated with the scripts above or
 provided separately.
+
