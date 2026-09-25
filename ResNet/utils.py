@@ -2,7 +2,7 @@ import os
 import sys
 import torch
 import torch.nn.functional as F
-# import tensorflow as tf
+import tensorflow as tf
 import csv
 import numpy as np
 import random
@@ -75,17 +75,17 @@ def compute_accuracy_from_predictions(predictions, labels):
     return torch.mean(torch.eq(labels, predictions).float())
 
 
-# def limit_tensorflow_memory_usage(gpu_memory_limit):
-#     gpus = tf.config.experimental.list_physical_devices('GPU')
-#     if gpus:
-#         try:
-#             for gpu in gpus:
-#                 tf.config.experimental.set_virtual_device_configuration(
-#                     gpu,
-#                     [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=gpu_memory_limit)]
-#                 )
-#         except RuntimeError as e:
-#             print(e)
+def limit_tensorflow_memory_usage(gpu_memory_limit):
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        try:
+            for gpu in gpus:
+                tf.config.experimental.set_virtual_device_configuration(
+                    gpu,
+                    [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=gpu_memory_limit)]
+                )
+        except RuntimeError as e:
+            print(e)
 
 
 class CsvWriter:
