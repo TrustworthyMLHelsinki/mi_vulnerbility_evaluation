@@ -1,4 +1,4 @@
-## Code for ``On Reliability of Efficient Membership Inference Vulnerability Evaluation``
+## Code for ``On Reliability of Membership Inference Vulnerability Evaluation``
 
 ### Dependencies:
 
