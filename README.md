@@ -34,7 +34,10 @@ Invoke these using `python -m TABFN.<module_name>`.
 
 ## Post-Processing experiments:
 
-## Post-processing experiments
+- For Adult/TabPFN, run `prepare_adult.py` from `PP` directory.
+- For CIFAR10/Head, use the cached features.
+- For CIFAR10/FiLM, use [CIFAR10](https://docs.pytorch.org/vision/main/generated/torchvision.datasets.CIFAR10.html) dataset.
+
 
 Generate scores and membership labels using,
 - `train.py` (Adult/TabPFN);
