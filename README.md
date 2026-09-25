@@ -6,6 +6,6 @@ Install dependencies with `pip install -r requirements.txt`.
 
 ## Data
 
-- **Adult:** Download the dataset from https://archive.ics.uci.edu/dataset/2/adult.
+- **Adult:** Download the dataset from https://archive.ics.uci.edu/dataset/2/adult. Run `python TABPFN/preprocess_adult.py` to combine the downloaded splits, remove rows with missing values, and write `data/adult/adult.csv` with 45,222 records.
 - **Patch Camelyon/CIFAR10:** obtain the data and cached features for head-only fine-tuning setup using
   [this repository](https://github.com/DPBayes/impact-dataset-properties-MI-vulnerability-deep-TL).
