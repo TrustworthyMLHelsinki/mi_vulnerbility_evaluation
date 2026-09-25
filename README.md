@@ -30,6 +30,8 @@ For TabPFN experiments, run these files in order:
 
 Invoke these using `python -m TABFN.<module_name>`.
 
+**[NOTE]** TabPFN experiments expect a CUDA-capable PyTorch setup as by default the code uses ``TabPFNClassifier(device="cuda")`.
+
 ## Plotting notebooks:
 
 In the workspace's `PLOTS` directory.
