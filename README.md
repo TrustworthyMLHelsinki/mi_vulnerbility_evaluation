@@ -30,7 +30,16 @@ For TabPFN experiments, run these files in order:
 
 Invoke these using `python -m TABFN.<module_name>`.
 
-**[NOTE]** TabPFN experiments expect a CUDA-capable PyTorch setup as by default the code uses ``TabPFNClassifier(device="cuda")`.
+**[NOTE]** TabPFN experiments expect a CUDA-capable PyTorch setup as by default the code uses `TabPFNClassifier(device="cuda")`.
+
+## Post-Processing experiments:
+
+## Post-processing experiments
+
+Generate scores and membership labels using,
+- `train.py` (Adult/TabPFN);
+- `train_linear_layer.py` (CIFAR10/Head);
+-  `ResNet/train_models.py` (CIFAR10/FiLM).
 
 ## Plotting notebooks:
 
