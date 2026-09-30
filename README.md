@@ -1,94 +1,52 @@
-## Code for ``On Reliability of Efficient Membership Inference Vulnerability Evaluation``
+## Code for ``On Reliability of Membership Inference Vulnerability Evaluation``
 
 ### Dependencies:
 
-Install the following Python dependencies:
+Install dependencies with `pip install -r requirements.txt`. 
 
-```bash
-numpy pandas scipy scikit-learn matplotlib tqdm tueplots jupyter torch tensorflow tabpfn
-```
+## Data:
 
-### Preparing Datasets:
+- **Adult:** Download the dataset from https://archive.ics.uci.edu/dataset/2/adult. Run `python TABPFN/preprocess_adult.py` to combine the downloaded splits, remove rows with missing values, and write `data/adult/adult.csv` with 45,222 records.
+- **Patch Camelyon/CIFAR10:** obtain the data and cached features for head-only fine-tuning setup using
+  [this repository](https://github.com/DPBayes/impact-dataset-properties-MI-vulnerability-deep-TL).
 
-Use `prepare_adult.py` to download, clean, balance, and encode the UCI Adult
-dataset:
+## FPC experiments:
 
-```bash
-python prepare_adult.py --out-dir adult_balanced_npy --train-size 10000 --random-state 42
-```
+In the workspace's `TABPFN` and `ViT` directories.
 
-If the Adult raw files are already available locally, pass both raw file paths:
+After obtaining the cached features, run these files in `ViT` in order:
+1. `prepare_fpc_subsets.py` — prepare the $N_+$ frames and fixed evaluation targets.
+2. `train_fpc_linear_finite_frame_models.py` — train $M$ finite-frame models, once per ratio.
+3. `train_fpc_linear_loo_models.py` — train the population-proxy $M$ IN/OUT models per target.
 
-```bash
-python prepare_adult.py \
-  --raw-train-path path/to/adult.data \
-  --raw-test-path path/to/adult.test \
-  --out-dir adult_balanced_npy
-```
+Invoke these using `python -m ViT.<module_name>`.
 
-The script writes `X.npy`, `y.npy`, train/test splits, feature metadata, and
-`metadata.json` to the output directory.
+For TabPFN experiments, run these files in order:
 
-Use `prepare_credit.py` to prepare the German Credit dataset:
+1. `preprocess_adult.py` — create `data/adult/adult.csv`.
+2. `prepare_fpc_subsets_tabpfn.py` — prepare the nested frames and fixed evaluation targets.
+3. `train_fpc_tabpfn_finite_frame_models_gpu.py` — fit finite-frame models, once per ratio.
+4. `train_fpc_tabpfn_loo_models_gpu.py` — fit the population-proxy IN/OUT models.
 
-```bash
-python prepare_credit.py --out-dir credit_npy --train-size 800 --random-state 42
-```
+Invoke these using `python -m TABFN.<module_name>`.
 
-By default this uses OpenML `credit-g`. To use a local UCI-format `german.data`
-file instead, pass `--raw-path path/to/german.data`.
+**[NOTE]** TabPFN experiments expect a CUDA-capable PyTorch setup as by default the code uses `TabPFNClassifier(device="cuda")`.
 
-`train_eff_lira_models.py` expects every dataset directory to contain `X.npy`
-and `y.npy`. The `--dataset` value is used only to name the results directory.
+## Post-Processing experiments:
 
-### Running Efficient LiRA:
-
-Use `train_eff_lira_models.py` in two steps. First create the membership matrix using,
-
-```bash
-python train_eff_lira_models.py \
-  --results results \
-  --dataset adult-balanced \
-  --dataset_dir adult_balanced_npy \
-  --target_dataset_size 10000 \
-  --seed 42 \
-  --num_models 10000
-```
-
-Then train TabPFN models for an index range:
-
-```bash
-python train_eff_lira_models.py \
-  --results results \
-  --dataset adult-balanced \
-  --dataset_dir adult_balanced_npy \
-  --target_dataset_size 10000 \
-  --seed 42 \
-  --num_models 10000 \
-  --train True \
-  --start_idx 0 \
-  --stop_idx 100
-```
-
-This writes files such as
-`{results}/{dataset}/Seed={seed}/T={target_dataset_size}/stats_target_m_in_{start_index}_{stop_index}.pkl`. Run additional ranges if needed.
+- For Adult/TabPFN, run `prepare_adult.py` from `PP` directory.
+- For CIFAR10/Head, use the cached features.
+- For CIFAR10/FiLM, use [CIFAR10](https://docs.pytorch.org/vision/main/generated/torchvision.datasets.CIFAR10.html) dataset.
 
 
-**[NOTE]** `train_eff_lira_models.py` uses `TabPFNClassifier(device="cuda")`, so the
-TabPFN experiments expect a CUDA-capable PyTorch setup. To run on CPU, change
-the `device="cuda"` argument in that file.
+Generate scores and membership labels using,
+- `train.py` (Adult/TabPFN);
+- `train_linear_layer.py` (CIFAR10/Head);
+-  `ResNet/train_models.py` (CIFAR10/FiLM).
 
-### Other Analysis Notebooks:
+## Plotting notebooks:
 
-The notebooks have the following roles:
-
-* `efficient_lira_with_pp.ipynb`: To compute efficient LiRA statistics with
-  post-processing from saved `in_indices_target.pkl` and `stats_target.pkl`
-  files.
-* `fpc.ipynb`: For finite-population correction analysis.
-* `plots.ipynb`: plotting code for saved experiment result files.
-
-Some notebooks expect result files under `results/`. These result files are not
-all included in the repository and should be generated with the scripts above or
-provided separately.
-
+In the workspace's `PLOTS` directory.
+- `plot_auc_ccdf.ipynb`: Figures 2;
+- `plot_variance_fits.ipynb`: Figure 3;
+- `plot_lira_pp_fpc.ipynb`: Figure 4.

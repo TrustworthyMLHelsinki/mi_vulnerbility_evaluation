@@ -1,0 +1,17 @@
+# Install the torch/torchvision builds appropriate for your CUDA or ROCm environment.
+numpy
+pandas
+scipy
+scikit-learn
+torch
+torchvision
+tabpfn
+timm
+Pillow
+tqdm
+psutil
+matplotlib
+tueplots
+jupyterlab
+tensorflow
+tensorflow-datasets
